@@ -11,11 +11,11 @@ require_once __DIR__ . '/database.php';
 /**
  * Lấy cấu hình email từ database
  */
-function getMailConfig() {
-    $pdo = getDBConnection();
-    $stmt = $pdo->query("SELECT * FROM CauHinhEmail LIMIT 1");
-    return $stmt->fetch();
-}
+// function getMailConfig() {
+//     $pdo = getDBConnection();
+//     $stmt = $pdo->query("SELECT * FROM CauHinhEmail LIMIT 1");
+//     return $stmt->fetch();
+// }
 
 /**
  * Gửi email tự động
@@ -28,7 +28,15 @@ function getMailConfig() {
  * @return array ['success' => bool, 'message' => string]
  */
 function sendEmail($to, $subject, $body, $isHTML = true, $debug = false) {
-    $config = getMailConfig();
+    // $config = getMailConfig();
+    $config = [
+            'SmtpHost' => 'smtp.gmail.com',
+            'SmtpPort' => 587,
+            'SmtpUsername' => 'thbao.thuduc@gmail.com',
+            'SmtpPassword' => 'gzgiilqoihmefzve',
+            'EmailNguoiGui' => 'thbao.thuduc@gmail.com',
+            'TenNguoiGui' => 'Hệ thống Nghỉ Phép'
+        ];
     
     if (!$config) {
         return ['success' => false, 'message' => 'Chưa cấu hình email trong hệ thống'];
