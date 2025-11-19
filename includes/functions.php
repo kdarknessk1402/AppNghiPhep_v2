@@ -49,8 +49,16 @@ function getStatusBadge($status) {
         'Cho_duyet_cap_1' => '<span class="badge bg-warning">Chờ duyệt cấp 1</span>',
         'Cho_duyet_cap_2' => '<span class="badge bg-info">Chờ duyệt cấp 2</span>',
         'Cho_duyet_cap_3' => '<span class="badge bg-primary">Chờ duyệt cấp 3</span>',
+        'Cho_duyet' => '<span class="badge bg-warning text-dark">Chờ duyệt</span>',
+        'cho_duyet' => '<span class="badge bg-warning text-dark">Chờ duyệt</span>',
         'Da_duyet' => '<span class="badge bg-success">Đã duyệt</span>',
-        'Tu_choi' => '<span class="badge bg-danger">Từ chối</span>'
+        'da_duyet' => '<span class="badge bg-success">Đã duyệt</span>',
+        'Tu_choi' => '<span class="badge bg-danger">Từ chối</span>',
+        'tu_choi' => '<span class="badge bg-danger">Từ chối</span>',
+        'Huy' => '<span class="badge bg-secondary">Đã hủy</span>',
+        'huy' => '<span class="badge bg-secondary">Đã hủy</span>',
+        'cap_don_vi_duyet' => '<span class="badge bg-info">Đang chờ cấp đơn vị</span>',
+        'cap_pht_duyet' => '<span class="badge bg-primary">Đang chờ cấp PHT</span>'
     ];
     
     return $badges[$status] ?? '<span class="badge bg-secondary">Không xác định</span>';
@@ -137,13 +145,20 @@ function getDepartments($pdo) {
  * Lấy thông tin vai trò
  */
 function getRoles($pdo) {
-    $stmt = $pdo->query("
-        SELECT MaVaiTro, TenVaiTro, MoTa
-        FROM VaiTro 
-        WHERE TrangThai = 1
-        ORDER BY MaVaiTro
-    ");
-    return $stmt->fetchAll();
+    try {
+        // Query đơn giản không dùng TrangThai vì bảng không có cột này
+        $stmt = $pdo->query("
+            SELECT MaVaiTro, TenVaiTro, MoTa, CapDuyet
+            FROM VaiTro 
+            ORDER BY MaVaiTro
+        ");
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+    } catch (PDOException $e) {
+        error_log("getRoles error: " . $e->getMessage());
+        return [];
+    }
 }
 
 /**

@@ -1,10 +1,12 @@
 <?php
 // views/admin/nguoi_dung.php - Quản lý người dùng
-
+require_once __DIR__ . '/../../includes/init.php';
+requireAuth(['ADMIN']);
 $pageTitle = 'Quản lý người dùng';
 require_once __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../config/mail_config.php';
+
 
 checkRole(['ADMIN']);
 
